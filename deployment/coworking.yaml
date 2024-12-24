@@ -74,3 +74,4 @@ spec:
               name: db-secret
               key: DB_PASSWORD
       restartPolicy: Always
+
