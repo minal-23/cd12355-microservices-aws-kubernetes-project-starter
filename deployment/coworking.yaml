@@ -30,19 +30,19 @@ spec:
     spec:
       containers:
       - name: coworking
-        image: 045523011388.dkr.ecr.us-east-1.amazonaws.com/coworking:1
+        image: 045523011388.dkr.ecr.us-east-1.amazonaws.com/coworking:2
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
             path: /health_check
             port: 5153
-          initialDelaySeconds: 120
+          initialDelaySeconds: 5
           timeoutSeconds: 2
         readinessProbe:
           httpGet:
             path: "/readiness_check"
             port: 5153
-          initialDelaySeconds: 120
+          initialDelaySeconds: 5
           timeoutSeconds: 5
         envFrom:
         - configMapRef:
