@@ -12,4 +12,4 @@ RUN pip install --upgrade pip setuptools wheel && pip install -r requirements.tx
 
 COPY analytics analytics
 
-CMD python analytics/app.py  # Update the path to app.py
+CMD python analytics/app.py  
