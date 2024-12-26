@@ -58,11 +58,11 @@ spec:
             configMapKeyRef:
               name: dbconfigmap
               key: DB_PORT
-        - name: DB_USER
+        - name: DB_USERNAME
           valueFrom:
             configMapKeyRef:
               name: dbconfigmap
-              key: DB_USER
+              key: DB_USERNAME
         - name: DB_NAME
           valueFrom:
             configMapKeyRef:
