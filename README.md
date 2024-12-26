@@ -1,4 +1,4 @@
-# Coworking Space Service Extension
+<!-- # Coworking Space Service Extension
 The Coworking Space Service is a set of APIs that enables users to request one-time tokens and administrators to authorize access to a coworking space. This service follows a microservice pattern and the APIs are split into distinct services that can be deployed and managed independently of one another.
 
 For this project, you are a DevOps engineer who will be collaborating with a team that is building an API for business analysts. The API provides business analysts basic analytics data on user activity in the service. The application they provide you functions as expected locally and you are expected to help build a pipeline to deploy it in Kubernetes.
@@ -128,4 +128,45 @@ Please provide up to 3 sentences for each suggestion. Additional content in your
 
 ### Best Practices
 * Dockerfile uses an appropriate base image for the application being deployed. Complex commands in the Dockerfile include a comment describing what it is doing.
-* The Docker images use semantic versioning with three numbers separated by dots, e.g. `1.2.1` and  versioning is visible in the  screenshot. See [Semantic Versioning](https://semver.org/) for more details.
+* The Docker images use semantic versioning with three numbers separated by dots, e.g. `1.2.1` and  versioning is visible in the  screenshot. See [Semantic Versioning](https://semver.org/) for more details. -->
+
+
+Deployment Screenshots folder has all the screenshots
+Deployment Process
+1. Set up the POSTGRESQL Service
+2. Checking the connectivity to Pod Connectivity with the Database
+kubectl exec -it postgresql-5496889656-jz4nh -- bash
+\dt to check tables
+\q from db
+exit from pod
+3. To populate the data into DB 
+Execute these commands in db folder 
+-->psql --host 127.0.0.1 -U postgres -d postgres -p 5433 -f "1_create_tables.sql"
+-->psql --host 127.0.0.1 -U postgres -d postgres -p 5433 -f "2_seed_users.sql"
+-->psql --host 127.0.0.1 -U postgres -d postgres -p 5433 -f "3_seed_tokens.sql"
+4. Create secret for DB_PASSWORD , convert the password to base64 
+echo -n 'your_db_password' | base64
+5. configmap.yaml has all the credentials of database and the same is referenced in the coworking.yaml env parameter
+6. kubectl get svc will give the URL to the application
+7. Can make a call using 
+curl a8de2a0fb75fd436c86f7afbe5e0b94f-1050374890.us-east-1.elb.amazonaws.com:5153/api/reports/daily_usage  to get the logs of the running pods
+
+## Deployment Process
+1. **Feature Branch Workflow**:
+   - Developers create feature branches in Git.
+   - Changes are pushed to the Git repository.
+   - A webhook triggers a build in AWS CodeBuild whenever new code is pushed to the repository.
+
+2. **Docker Image Creation**:
+   - AWS CodeBuild automatically builds a Docker image using the latest code.
+   - The image is pushed to Amazon Elastic Container Registry (ECR).
+
+3. **EKS Deployment**:
+   - The EKS cluster pulls the new Docker image from ECR.
+   - The updated deployment is applied using `kubectl` 
+   - EKS ensures high availability and scalability of the deployed application.
+4. **Verification**:
+Cloud watch is used to monitor the container and to gain container insights and to get the logs , a call is made using curl 
+
+-->Currently i have used t3.small and AMD Architecture as it would be compatible with archiecture of the image as well , because the architectures of EKS Nodes and Image - Linux container must be matched .
+-->The cost of the application can be reduced by using the spot instances and also by using the auto scaling, scale up and down based on traffic will definitely help with costs
